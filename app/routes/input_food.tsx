@@ -16,7 +16,7 @@ export default function Test() {
           type="text" 
           placeholder="type here"
           
-          className="bg-slate-50 placeholder-slate-600 rounded-full text-black w-5/6 max-w-96 text-center"
+          className="bg-slate-50 placeholder-slate-500 rounded-full text-black w-5/6 max-w-96 text-center"
         />
 
         <NavLink
