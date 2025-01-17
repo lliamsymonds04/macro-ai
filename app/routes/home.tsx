@@ -15,19 +15,18 @@ const buttons = [
 
 export default function Home() {
   return (
-  <div className="flex flex-col items-center mt-10 gap-5">
-    <h1 className="text-4xl font-bold">Macro AI</h1>
-    <text>Use AI to determine calories and protein of food</text>
-    <div/>
-    
-    {buttons.map((button, index) => (
-      <NavLink 
-        key={index}
-        to={button.page}
-        className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-52 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold flex items-center justify-center transition-all duration-100"
-      >{button.label}</NavLink>
-    ))}
-
-    
-  </div>)
+    <div className="flex flex-col items-center mt-10 gap-5">
+      <h1 className="text-4xl font-bold">Macro AI</h1>
+      <p>Use AI to determine calories and protein of food</p>
+      <div/>
+      
+      {buttons.map((button, index) => (
+        <NavLink 
+          key={index}
+          to={button.page}
+          className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-52 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold flex items-center justify-center transition-all duration-100"
+        >{button.label}</NavLink>
+      ))}
+    </div>
+  )
 }
