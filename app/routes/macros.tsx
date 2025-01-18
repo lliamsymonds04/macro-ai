@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Route } from "./+types/macros";
-
-import { getMacros } from "~/utils/GetMacros";
-import { useLocation, useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
+// import {HashLoader} from "react-spinners";
+import HashLoader from "react-spinners/HashLoader";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,61 +11,100 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-// const [foodDescriptionState, setFoodDescription] = useState("")
-
-export async function clientLoader({params}: Route.LoaderArgs) {
-  console.log("loader called")
-  const foodDescription = params.foodDescription
-
-  return await getMacros(foodDescription)
-  // return {
-  //   protein: 500,
-  //   calories: 400,
-  // }
+interface ProteinAndCalories {
+  protein: number,
+  calories: number,
 }
 
-export function hydrateFallback() {
+function testingMacros(): Promise<ProteinAndCalories> {
+  return new Promise((res) => {
+    setTimeout(() => res({
+      protein: 20,
+      calories: 100,
+    })
+  , 2000)})
+}
+
+function MacrosWidget({protein, calories}: {protein: number, calories: number}) {
+
   return (
-    <div>
-      <text>test</text>
+    <div className="flex flex-col items-center gap-2 border-4 border-purple-600 rounded-md px-4 py-1">
+      <p>Calories: {calories}</p>
+      <p>Protein: {protein}</p>
     </div>
   )
 }
 
-export default function Macros({ loaderData }: Route.ComponentProps) {
+export default function Macros() {
   const navigate = useNavigate()
   const {foodDescription} = useParams()
-  const [calories, setCalories] = useState(1000)
-  const [protein, setProtein] = useState(1000)
-
-  useEffect(() => {
-    if (loaderData?.calories && loaderData?.protein) {
-      setCalories(loaderData.calories)
-      setProtein(loaderData.protein)
-
-    }
-  }) 
+  const [calories, setCalories] = useState(0)
+  const [protein, setProtein] = useState(0)
+  const [isLoaded, setLoaded] = useState(false)
 
   const goToHomePage = () => {
-    // Navigate to the home page and replace the history
     navigate('/', { replace: true });
   };
 
-  return (
-    <div className="flex flex-col items-center mt-10 gap-8">
-        <h1 className="font-bold text-4xl">Macros</h1>
-        <p> Prompt: {foodDescription} </p>
-        
-        <div className="flex flex-col items-center gap-2 border-4 border-purple-600 rounded-md px-4 py-1">
-          <p>Calories: {calories}</p>
-          <p>Protein: {protein}</p>
-        </div>
-        
-        <button 
-          onClick={goToHomePage}
-          className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-24 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold transition-all duration-100"
+  async function loadMacros() {
+    try {
+      const result = await testingMacros()
+      setProtein(result.protein)
+      setCalories(result.calories)
+      setLoaded(true)
+    } catch (error) {
+      console.error('Error fetching macros:', error);
+    }
+  }
 
-        >Ok</button>
-    </div>
+  useEffect(() => {
+    setLoaded(false)
+    loadMacros()
+  }, [foodDescription])
+
+
+  return (
+    
+    <div className="flex flex-col items-center mt-10 gap-8">
+       <h1 className="font-bold text-4xl">Macros</h1>
+       <p> Prompt: {foodDescription} </p>
+    
+       <div className={`flex flex-col items-center gap-4 overflow-hidden transition-all duration-1000 ${
+          isLoaded? "max-h-64" : "max-h-0"
+        }`}>
+          <MacrosWidget calories={calories} protein={protein}/>
+          <button 
+            onClick={goToHomePage}
+            className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-24 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold transition-all duration-100"
+
+          >Ok</button>
+        </div>
+        <HashLoader
+          color={"#9d00ff"}
+          loading={!isLoaded}
+          size={50}
+        />
+       
+  </div>
   )
 }
+
+
+// {isLoaded ? (
+//   <div className={`flex flex-col items-center gap-4 overflow-hidden transition-all duration-500 ${
+//     isLoaded? "max-h-64" : "max-h-0"
+//   }`}>
+//     <MacrosWidget calories={calories} protein={protein}/>
+//     <button 
+//       onClick={goToHomePage}
+//       className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-24 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold transition-all duration-100"
+
+//     >Ok</button>
+//   </div>
+// ) : (
+//  <HashLoader
+//   color={"#9d00ff"}
+//   loading={true}
+//   size={50}
+//  />
+// )}
