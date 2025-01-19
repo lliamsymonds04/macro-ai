@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
 import HashLoader from "react-spinners/HashLoader";
 import type { Route } from "./+types/camera";
@@ -29,7 +29,6 @@ export default function Camera() {
             }
 
             setProcessingImage(true)
-            // const imageSrc = webcamRef.current.getScreenshot();
             setImageSrc(webcamRef.current.getScreenshot())
         },
         [webcamRef]
