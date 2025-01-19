@@ -10,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 
 const buttons = [
   {label: "input food", page: "/input_food"},
-  {label: "use camera", page: "/test"}
+  {label: "use camera", page: "/camera"}
 ]
 
 export default function Home() {
