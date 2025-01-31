@@ -41,3 +41,20 @@ export async function getMacros(foodDescription: string) {
         }
     }
 }
+
+export async function describeFood(foodImageUrl: string) {
+  const gpt_prompt = await fetchTextFile('/GptPrompts/DescribeFood.txt')
+
+  const gpt_response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{"role": "system", "content": gpt_prompt},
+              {"role": "user", "content": [{
+                  "type": "image_url",
+                  "image_url": {"url": foodImageUrl},
+              }]},]
+  })
+
+  if (gpt_response) {
+    return gpt_response.choices[0].message.content
+  }
+}

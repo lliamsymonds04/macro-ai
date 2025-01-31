@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Route } from "./+types/macros";
 import { useParams, useNavigate } from "react-router";
-// import {HashLoader} from "react-spinners";
 import HashLoader from "react-spinners/HashLoader";
 
 export function meta({}: Route.MetaArgs) {

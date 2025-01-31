@@ -16,7 +16,6 @@ const buttons = [
 export default function Home() {
   return (
     <div className="flex flex-col items-center mt-10 gap-5">
-      <h1 className="text-4xl font-bold">Macro AI</h1>
       <p>Use AI to determine calories and protein of food</p>
       <div/>
       

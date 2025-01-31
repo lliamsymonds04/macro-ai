@@ -1,7 +1,10 @@
 import { useRef, useState, useCallback } from "react";
+import { useNavigate } from "react-router";
 import Webcam from "react-webcam";
 import HashLoader from "react-spinners/HashLoader";
 import type { Route } from "./+types/camera";
+
+import { describeFood, getMacros } from "~/utils/GetMacros";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,20 +19,68 @@ const videoConstraints = {
     facingMode: "environment"
   };
 
+
+async function uploadImageToImgur(imageSrc: string) {
+    const api_key = import.meta.env.VITE_IMGUR_CLIENT_ID
+
+    try {
+        const response = await fetch("https://api.imgur.com/3/image", {
+          method: "POST",
+          headers: {
+            Authorization: `Client-ID ${api_key}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            image: imageSrc.split(",")[1], // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
+            type: "base64",
+          }),
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+        //   setUploadUrl(data.data.link); // Save the uploaded image URL
+          alert("Image uploaded successfully!");
+          return result.data.link
+        } else {
+          alert("Failed to upload image to Imgur.");
+        }
+    } catch (error) {
+        console.error("Error uploading image to Imgur:", error);
+        alert("An error occurred during the upload.");
+    }
+}
+
 export default function Camera() {
+    const navigate = useNavigate()
+
     const webcamRef = useRef<Webcam>(null);
     const [isProcessingImage, setProcessingImage] = useState(false)
     const [imageSrc, setImageSrc] = useState<string | null>(null)
 
 
     const captureFood = useCallback(
-        () => {
+        async () => {
             if (webcamRef.current == null || isProcessingImage) {
                 return 
             }
 
             setProcessingImage(true)
             setImageSrc(webcamRef.current.getScreenshot())
+
+            if (imageSrc) {
+                try {
+
+                    const url = await uploadImageToImgur(imageSrc)
+
+                    const food_description = describeFood(url)
+
+                    navigate(`/macros/${food_description}`, { replace: true });
+
+                } finally {
+                    setProcessingImage(false)
+                    setImageSrc(null)
+                }
+            }
         },
         [webcamRef]
     );
@@ -59,9 +110,7 @@ export default function Camera() {
             <button 
                 onClick={captureFood}
                 className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-24 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold transition-all duration-100"
-            >Capture</button>
-
-            }
+            >Capture</button>}
             
         </div>
     )
