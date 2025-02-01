@@ -7,3 +7,4 @@ Total Protein: {protein}
 Total Calories: {calories}
 
 do not list the items simply stat the protein and calories of the meal
+if it is not a food respond "Failed"
