@@ -69,7 +69,7 @@ export default function Camera() {
 
                     const url = await uploadImageToImgur(screenShot)
 
-                    const food_description = describeFood(url)
+                    const food_description = await describeFood(url)
 
                     navigate(`/macros/${food_description}`, { replace: true });
 
