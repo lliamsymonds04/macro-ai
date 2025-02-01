@@ -24,26 +24,15 @@ async function uploadImageToImgur(imageSrc: string) {
     const api_key = import.meta.env.VITE_IMGUR_CLIENT_ID
 
     const base64Image = imageSrc.split(",")[1];
-    // console.log(base64Image)
-    // const response = await fetch("https://api.imgur.com/3/image", {
-    //     method: "POST",
-    //     headers: {
-    //         'Authorization': `Client-ID ${api_key}`,
-    //     },
-    //     body: JSON.stringify({
-    //         image: base64Image, // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
-    //         type: "base64",
-    //     }),
-    // });
     const formData = new FormData();
-    formData.append("image", base64Image); // Add image as form data
+    formData.append("image", base64Image);
 
     const response = await fetch("https://api.imgur.com/3/image", {
         method: "POST",
         headers: {
             'Authorization': `Client-ID ${api_key}`,
         },
-        body: formData,  // Use form data, not JSON
+        body: formData,
     });
 
     const result = await response.json();
