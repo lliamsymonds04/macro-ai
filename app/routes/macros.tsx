@@ -3,6 +3,8 @@ import type { Route } from "./+types/macros";
 import { useParams, useNavigate } from "react-router";
 import HashLoader from "react-spinners/HashLoader";
 
+import { getMacros } from "~/utils/GetMacros";
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "macros" },
@@ -45,12 +47,16 @@ export default function Macros() {
     navigate('/', { replace: true });
   };
 
-  async function loadMacros() {
+  async function loadMacros(description: string) {
     try {
-      const result = await testingMacros()
-      setProtein(result.protein)
-      setCalories(result.calories)
-      setLoaded(true)
+      // const result = await testingMacros()
+      const result = await getMacros(description)
+      if (result) {
+        setProtein(result.protein)
+        setCalories(result.calories)
+        setLoaded(true)
+      }
+      
     } catch (error) {
       console.error('Error fetching macros:', error);
     }
@@ -58,7 +64,9 @@ export default function Macros() {
 
   useEffect(() => {
     setLoaded(false)
-    loadMacros()
+    if (foodDescription !== undefined) {
+      loadMacros(foodDescription)
+    }
   }, [foodDescription])
 
 
