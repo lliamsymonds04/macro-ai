@@ -23,7 +23,8 @@ const videoConstraints = {
 async function uploadImageToImgur(imageSrc: string) {
     const api_key = import.meta.env.VITE_IMGUR_CLIENT_ID
 
-    // try {
+    const base64Image = imageSrc.split(",")[1];
+    console.log(base64Image)
     const response = await fetch("https://api.imgur.com/3/image", {
         method: "POST",
         headers: {
@@ -31,8 +32,8 @@ async function uploadImageToImgur(imageSrc: string) {
         "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        image: imageSrc.split(",")[1], // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
-        type: "base64",
+            image: base64Image, // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
+            type: "base64",
         }),
     });
 
@@ -68,9 +69,7 @@ export default function Camera() {
 
                     const url = await uploadImageToImgur(screenShot)
 
-                    console.log("describing food")
                     const food_description = describeFood(url)
-                    console.log(food_description)
 
                     navigate(`/macros/${food_description}`, { replace: true });
 

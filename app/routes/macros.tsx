@@ -12,20 +12,6 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-interface ProteinAndCalories {
-  protein: number,
-  calories: number,
-}
-
-function testingMacros(): Promise<ProteinAndCalories> {
-  return new Promise((res) => {
-    setTimeout(() => res({
-      protein: 20,
-      calories: 100,
-    })
-  , 2000)})
-}
-
 function MacrosWidget({protein, calories}: {protein: number, calories: number}) {
 
   return (
@@ -49,7 +35,6 @@ export default function Macros() {
 
   async function loadMacros(description: string) {
     try {
-      // const result = await testingMacros()
       const result = await getMacros(description)
       if (result) {
         setProtein(result.protein)
@@ -58,7 +43,8 @@ export default function Macros() {
       }
       
     } catch (error) {
-      console.error('Error fetching macros:', error);
+      alert("Failed to get macros.")
+      navigate('/', { replace: true });
     }
   }
 
@@ -95,23 +81,3 @@ export default function Macros() {
   </div>
   )
 }
-
-
-// {isLoaded ? (
-//   <div className={`flex flex-col items-center gap-4 overflow-hidden transition-all duration-500 ${
-//     isLoaded? "max-h-64" : "max-h-0"
-//   }`}>
-//     <MacrosWidget calories={calories} protein={protein}/>
-//     <button 
-//       onClick={goToHomePage}
-//       className="bg-violet-600 hover:bg-violet-700 w-1/2 max-w-24 rounded-full h-10 focus:outline-none focus:ring focus:ring-violet-400 font-bold transition-all duration-100"
-
-//     >Ok</button>
-//   </div>
-// ) : (
-//  <HashLoader
-//   color={"#9d00ff"}
-//   loading={true}
-//   size={50}
-//  />
-// )}

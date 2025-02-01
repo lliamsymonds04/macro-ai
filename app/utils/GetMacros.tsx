@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 
 import fetchTextFile from "./FetchTextFile";
-import { get } from "http";
 
 const OPEN_AI_KEY = import.meta.env.VITE_OPEN_AI_KEY
 const openai = new OpenAI({apiKey: OPEN_AI_KEY, dangerouslyAllowBrowser: true});
