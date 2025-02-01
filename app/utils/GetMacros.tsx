@@ -46,7 +46,7 @@ export async function describeFood(foodImageUrl: string) {
   const gpt_prompt = await fetchTextFile('/GptPrompts/DescribeFood.txt')
 
   const gpt_response = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-4o",
     messages: [{"role": "system", "content": gpt_prompt},
               {"role": "user", "content": [{
                   "type": "image_url",

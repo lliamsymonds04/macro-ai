@@ -16,7 +16,8 @@ const buttons = [
 export default function Home() {
   return (
     <div className="flex flex-col items-center mt-10 gap-5">
-      <p>Use AI to determine calories and protein of food</p>
+      <h1 className="font-bold text-4xl">Macro AI</h1>
+      <p className="text-center max-w-fit">Use AI to determine calories and protein of food</p>
       <div/>
       
       {buttons.map((button, index) => (

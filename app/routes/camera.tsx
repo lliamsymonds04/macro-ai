@@ -23,30 +23,25 @@ const videoConstraints = {
 async function uploadImageToImgur(imageSrc: string) {
     const api_key = import.meta.env.VITE_IMGUR_CLIENT_ID
 
-    try {
-        const response = await fetch("https://api.imgur.com/3/image", {
-          method: "POST",
-          headers: {
-            Authorization: `Client-ID ${api_key}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            image: imageSrc.split(",")[1], // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
-            type: "base64",
-          }),
-        });
-  
-        const result = await response.json();
-        if (result.success) {
-        //   setUploadUrl(data.data.link); // Save the uploaded image URL
-          alert("Image uploaded successfully!");
-          return result.data.link
-        } else {
-          alert("Failed to upload image to Imgur.");
-        }
-    } catch (error) {
-        console.error("Error uploading image to Imgur:", error);
-        alert("An error occurred during the upload.");
+    // try {
+    const response = await fetch("https://api.imgur.com/3/image", {
+        method: "POST",
+        headers: {
+        Authorization: `Client-ID ${api_key}`,
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        image: imageSrc.split(",")[1], // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
+        type: "base64",
+        }),
+    });
+
+    const result = await response.json();
+    console.log(result)
+    if (result.success) {
+        return result.data.link
+    } else {
+        throw new Error("Failed to upload image to Imgur.")
     }
 }
 
@@ -65,21 +60,30 @@ export default function Camera() {
             }
 
             setProcessingImage(true)
-            setImageSrc(webcamRef.current.getScreenshot())
+            const screenShot = webcamRef.current.getScreenshot()
+            setImageSrc(screenShot)
 
-            if (imageSrc) {
+            if (screenShot) {
                 try {
 
-                    const url = await uploadImageToImgur(imageSrc)
+                    const url = await uploadImageToImgur(screenShot)
 
+                    console.log("describing food")
                     const food_description = describeFood(url)
+                    console.log(food_description)
 
                     navigate(`/macros/${food_description}`, { replace: true });
 
+                } catch {
+                    alert("Failed to process image.")
+                    navigate('/', { replace: true });
                 } finally {
                     setProcessingImage(false)
                     setImageSrc(null)
                 }
+            } else {
+                setProcessingImage(false)
+                alert("Failed to capture image.")
             }
         },
         [webcamRef]
@@ -89,14 +93,12 @@ export default function Camera() {
         <div className="flex flex-col items-center mt-10 gap-8">
             <h1 className="font-bold text-4xl">Capture Food</h1>
 
-            <div className="border-purple-600 border-4 rounded-md">
+            <div className="border-purple-600 border-4 rounded-lg w-5/6 max-w-xl">
                 {imageSrc ? <img src={imageSrc} alt="Captured"/> :
                 
                 <Webcam
                     audio={false}
-                    height={720}
                     screenshotFormat="image/jpeg"
-                    width={1280}
                     videoConstraints={videoConstraints}
                     ref={webcamRef}
                 />}
