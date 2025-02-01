@@ -10,8 +10,13 @@ This website uses ChatGPT prompt engineering to determine the calories and prote
 * Then that description is passed back to ChatGPT where it estimates the calories and protein
 
 ## Example
-![Demo](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2lwNzRzc2s3ZWk4czMzcmFhZHN0YzZiNW01OHkwbXB4ZHBzYTh6OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yjzh32zrkf2jD8l4na/giphy.gif)
+![Demo](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExajRwdm42YXplbGZuMGs5cm95dm12cW85dHlrZDZyOGozbDU5Zm1jcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XcgD12iKPtDT199X4y/giphy.gif)
 
 ## Techstack
-* made using react, vite, typescript and tailwind css
+made using
+* React
+* Vite
+* Typescript
+* Tailwind css
+
 
