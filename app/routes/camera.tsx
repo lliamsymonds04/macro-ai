@@ -4,7 +4,7 @@ import Webcam from "react-webcam";
 import HashLoader from "react-spinners/HashLoader";
 import type { Route } from "./+types/camera";
 
-import { describeFood, getMacros } from "~/utils/GetMacros";
+import { describeFood } from "~/utils/GetMacros";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -28,8 +28,7 @@ async function uploadImageToImgur(imageSrc: string) {
     const response = await fetch("https://api.imgur.com/3/image", {
         method: "POST",
         headers: {
-        Authorization: `Client-ID ${api_key}`,
-        "Content-Type": "application/json",
+            'Authorization': `Client-ID ${api_key}`,
         },
         body: JSON.stringify({
             image: base64Image, // Remove the base64 prefix (e.g., "data:image/jpeg;base64,")
