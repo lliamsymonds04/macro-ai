@@ -2,7 +2,7 @@
 
 <a href="macro-ai.netlify.app" style="font-size: 20px;"><u>Try it here!</u></a>
 
-This website uses ChatGPT prompt engineering to determine the calories and protein of food from image or text
+This website uses ChatGPT prompt engineering to determine the calories and protein of food from or phone camera
 
 ## How it works
 * The photo taken is uploaded to imgur
