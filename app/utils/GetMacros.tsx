@@ -34,12 +34,13 @@ export async function getMacros(foodDescription: string) {
 
     if (gpt_response) {
         const message = gpt_response.choices[0].message.content
-        console.log(message)
 
         if (message) {
             return getProteinAndCalories(message)
         }
     }
+
+    throw new Error("Failed to get macros.")
 }
 
 export async function describeFood(foodImageUrl: string) {
@@ -56,5 +57,7 @@ export async function describeFood(foodImageUrl: string) {
 
   if (gpt_response) {
     return gpt_response.choices[0].message.content
+  } else {
+    throw new Error("Failed to describe food.")
   }
 }
