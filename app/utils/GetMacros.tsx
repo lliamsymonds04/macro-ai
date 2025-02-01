@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 
 import fetchTextFile from "./FetchTextFile";
+import { get } from "http";
 
 const OPEN_AI_KEY = import.meta.env.VITE_OPEN_AI_KEY
 const openai = new OpenAI({apiKey: OPEN_AI_KEY, dangerouslyAllowBrowser: true});
@@ -33,12 +34,13 @@ export async function getMacros(foodDescription: string) {
     });
 
     if (gpt_response) {
-        const message = gpt_response.choices[0].message.content
-
-        if (message) {
-            return getProteinAndCalories(message)
-        }
+      const message =  gpt_response.choices[0].message.content
+  
+      if (message !== null && message !== "Failed") {
+        return getProteinAndCalories(message)
+      }
     }
+  
 
     throw new Error("Failed to get macros.")
 }
@@ -56,8 +58,12 @@ export async function describeFood(foodImageUrl: string) {
   })
 
   if (gpt_response) {
-    return gpt_response.choices[0].message.content
-  } else {
-    throw new Error("Failed to describe food.")
+    const message =  gpt_response.choices[0].message.content
+
+    if (message !== null && message !== "Failed") {
+      return message
+    }
   }
+
+  throw new Error("Failed to describe food.")
 }
